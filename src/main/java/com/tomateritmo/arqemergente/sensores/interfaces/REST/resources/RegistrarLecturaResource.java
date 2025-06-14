@@ -1,4 +1,10 @@
 package com.tomateritmo.arqemergente.sensores.interfaces.REST.resources;
 
-public record RegistrarLecturaResource() {
-}
+import java.time.LocalDateTime;
+
+public record RegistrarLecturaResource(
+        String tipoSensor,
+        Double valor,
+        LocalDateTime timestamp,
+        String sector
+) {}

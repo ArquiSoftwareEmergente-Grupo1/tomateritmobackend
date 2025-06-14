@@ -1,4 +1,4 @@
-package com.iot.error404.chakiy.shared.config;
+package com.tomateritmo.arqemergente.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

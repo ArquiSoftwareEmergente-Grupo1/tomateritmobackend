@@ -1,4 +1,3 @@
 package com.tomateritmo.arqemergente.cultivos.domain.model.commands;
 
-public record DeleteCultivoCommand() {
-}
+public record DeleteCultivoCommand(Long cultivoId) {}

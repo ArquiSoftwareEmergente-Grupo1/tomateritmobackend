@@ -1,4 +1,4 @@
-package com.iot.error404.chakiy.shared.domain.model.aggregates;
+package com.tomateritmo.arqemergente.shared.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import lombok.Getter;

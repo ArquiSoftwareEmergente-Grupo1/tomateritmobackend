@@ -1,4 +1,4 @@
-package com.iot.error404.chakiy.shared.domain.model.entities;
+package com.tomateritmo.arqemergente.shared.domain.model.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

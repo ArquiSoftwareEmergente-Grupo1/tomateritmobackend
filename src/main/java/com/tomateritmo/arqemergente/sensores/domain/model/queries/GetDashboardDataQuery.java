@@ -1,4 +1,4 @@
 package com.tomateritmo.arqemergente.sensores.domain.model.queries;
 
-public record GetDashboardDataQuery() {
-}
+// Esta query puede no necesitar parámetros si obtiene datos globales
+public record GetDashboardDataQuery() {}

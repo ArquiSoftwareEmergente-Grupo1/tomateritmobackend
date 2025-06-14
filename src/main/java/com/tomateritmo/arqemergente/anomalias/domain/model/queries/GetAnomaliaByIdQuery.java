@@ -1,4 +1,3 @@
 package com.tomateritmo.arqemergente.anomalias.domain.model.queries;
 
-public record GetAnomaliaByIdQuery() {
-}
+public record GetAnomaliaByIdQuery(Long anomaliaId) {}

@@ -1,4 +1,3 @@
 package com.tomateritmo.arqemergente.cultivos.domain.model.queries;
 
-public record GetCultivoByIdQuery() {
-}
+public record GetCultivoByIdQuery(Long cultivoId) {}

@@ -1,6 +1,5 @@
-package com.iot.error404.chakiy.shared.domain.model.valueobjects;
+package com.tomateritmo.arqemergente.shared.domain.model.valueobjects;
 
-import lombok.Getter;
 import java.time.LocalDate;
 import java.time.Period;
 
