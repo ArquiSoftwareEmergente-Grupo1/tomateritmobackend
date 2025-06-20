@@ -1,13 +1,16 @@
 package com.tomateritmo.arqemergente.sensores.interfaces.REST;
 
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetDashboardDataQuery;
+import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetLatestLecturasQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetSensorHistoryQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.valueobjects.TipoSensor;
 import com.tomateritmo.arqemergente.sensores.domain.services.SensorCommandService;
 import com.tomateritmo.arqemergente.sensores.domain.services.SensorQueryService;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.DashboardDataResource;
+import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.LecturaSensorResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.RegistrarLecturaResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.SensorHistoryDataResource;
+import com.tomateritmo.arqemergente.sensores.interfaces.REST.transform.LecturaSensorResourceFromEntityAssembler;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.transform.RegistrarLecturaCommandFromResourceAssembler;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -40,6 +45,18 @@ public class SensoresController {
         return result.isPresent() ?
                 new ResponseEntity<>(HttpStatus.CREATED) :
                 ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/lecturas")
+    public ResponseEntity<List<LecturaSensorResource>> getLatestLecturas(
+            @RequestParam(defaultValue = "20") int limit) {
+
+        var query = new GetLatestLecturasQuery(limit);
+        var lecturas = sensorQueryService.handle(query);
+        var resources = lecturas.stream()
+                .map(LecturaSensorResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
     }
 
     @GetMapping("/dashboard")

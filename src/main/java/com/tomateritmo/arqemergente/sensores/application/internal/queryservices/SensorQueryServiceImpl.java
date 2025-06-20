@@ -2,12 +2,16 @@ package com.tomateritmo.arqemergente.sensores.application.internal.queryservices
 
 import com.tomateritmo.arqemergente.sensores.domain.model.entities.LecturaSensor;
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetDashboardDataQuery;
+import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetLatestLecturasQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetSensorHistoryQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.valueobjects.TipoSensor;
 import com.tomateritmo.arqemergente.sensores.domain.services.SensorQueryService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import com.tomateritmo.arqemergente.sensores.infrastructure.persistence.jpa.repositories.LecturaSensorRepository;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.DashboardDataResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.SensorHistoryDataResource;
+
 
 import org.springframework.stereotype.Service;
 
@@ -69,5 +73,12 @@ public class SensorQueryServiceImpl implements SensorQueryService {
         });
 
         return Optional.of(new SensorHistoryDataResource(series));
+    }
+
+    @Override
+    public List<LecturaSensor> handle(GetLatestLecturasQuery query) {
+        // Creamos un objeto Pageable para limitar los resultados
+        Pageable limit = PageRequest.of(0, query.limit()); // Página 0, con el tamaño del límite
+        return lecturaSensorRepository.findByOrderByTimestampDesc(limit);
     }
 }

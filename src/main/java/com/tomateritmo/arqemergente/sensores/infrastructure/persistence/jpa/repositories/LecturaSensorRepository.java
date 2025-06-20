@@ -1,6 +1,7 @@
 package com.tomateritmo.arqemergente.sensores.infrastructure.persistence.jpa.repositories;
 
 import com.tomateritmo.arqemergente.sensores.domain.model.entities.LecturaSensor;
+import org.springframework.data.domain.Pageable;
 import com.tomateritmo.arqemergente.sensores.domain.model.valueobjects.TipoSensor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface LecturaSensorRepository extends JpaRepository<LecturaSensor, Lo
             List<TipoSensor> tiposSensor,
             LocalDateTime start,
             LocalDateTime end);
+
+    List<LecturaSensor> findByOrderByTimestampDesc(Pageable pageable);
 }
+
