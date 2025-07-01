@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface CultivoQueryService {
     List<Cultivo> handle(GetAllCultivosQuery query);
     Optional<Cultivo> handle(GetCultivoByIdQuery query);
+    List<Cultivo> handle(GetCultivosByUserIdQuery query);
 }

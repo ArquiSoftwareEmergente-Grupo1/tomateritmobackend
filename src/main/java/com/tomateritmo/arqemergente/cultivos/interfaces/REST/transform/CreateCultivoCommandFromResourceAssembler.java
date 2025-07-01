@@ -5,6 +5,7 @@ import com.tomateritmo.arqemergente.cultivos.interfaces.REST.resources.CreateCul
 public class CreateCultivoCommandFromResourceAssembler {
     public static CreateCultivoCommand toCommandFromResource(CreateCultivoResource resource) {
         return new CreateCultivoCommand(
+                resource.userId(),
                 resource.nombre(),
                 resource.sector(),
                 resource.faseFenologica(),

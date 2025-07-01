@@ -6,6 +6,7 @@ public class CultivoResourceFromEntityAssembler {
     public static CultivoResource toResourceFromEntity(Cultivo entity) {
         return new CultivoResource(
                 entity.getId(),
+                entity.getUserId(),
                 entity.getNombre(),
                 entity.getSector(),
                 entity.getFaseFenologica().name(),

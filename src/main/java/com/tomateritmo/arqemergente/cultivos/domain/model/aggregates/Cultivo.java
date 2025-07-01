@@ -17,6 +17,9 @@ public class Cultivo extends AuditableAbstractAggregateRoot<Cultivo> {
     private Long id;
 
     @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
     private String nombre;
 
     @Column(nullable = false)
@@ -36,6 +39,7 @@ public class Cultivo extends AuditableAbstractAggregateRoot<Cultivo> {
     public Cultivo() {}
 
     public Cultivo(CreateCultivoCommand command) {
+        this.userId = command.userId();
         this.nombre = command.nombre();
         this.sector = command.sector();
         this.faseFenologica = FaseFenologica.valueOf(command.faseFenologica());

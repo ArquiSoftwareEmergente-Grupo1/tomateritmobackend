@@ -25,4 +25,9 @@ public class CultivoQueryServiceImpl implements CultivoQueryService {
     public Optional<Cultivo> handle(GetCultivoByIdQuery query) {
         return cultivoRepository.findById(query.cultivoId());
     }
+
+    @Override
+    public List<Cultivo> handle(GetCultivosByUserIdQuery query) {
+        return cultivoRepository.findByUserId(query.userId());
+    }
 }

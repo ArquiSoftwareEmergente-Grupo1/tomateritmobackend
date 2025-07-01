@@ -3,6 +3,7 @@ package com.tomateritmo.arqemergente.cultivos.interfaces.REST;
 import com.tomateritmo.arqemergente.cultivos.domain.model.commands.DeleteCultivoCommand;
 import com.tomateritmo.arqemergente.cultivos.domain.model.queries.GetAllCultivosQuery;
 import com.tomateritmo.arqemergente.cultivos.domain.model.queries.GetCultivoByIdQuery;
+import com.tomateritmo.arqemergente.cultivos.domain.model.queries.GetCultivosByUserIdQuery;
 import com.tomateritmo.arqemergente.cultivos.domain.services.CultivoCommandService;
 import com.tomateritmo.arqemergente.cultivos.domain.services.CultivoQueryService;
 import com.tomateritmo.arqemergente.cultivos.interfaces.REST.resources.*;
@@ -43,10 +44,19 @@ public class CultivosController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CultivoResource>> getAllCultivos() {
-        var query = new GetAllCultivosQuery();
-        var cultivos = cultivoQueryService.handle(query);
-        var cultivoResources = cultivos.stream().map(CultivoResourceFromEntityAssembler::toResourceFromEntity).toList();
+    public ResponseEntity<List<CultivoResource>> getAllCultivos(@RequestParam(required = false) Long userId) {
+        List<CultivoResource> cultivoResources;
+        
+        if (userId != null) {
+            var query = new GetCultivosByUserIdQuery(userId);
+            var cultivos = cultivoQueryService.handle(query);
+            cultivoResources = cultivos.stream().map(CultivoResourceFromEntityAssembler::toResourceFromEntity).toList();
+        } else {
+            var query = new GetAllCultivosQuery();
+            var cultivos = cultivoQueryService.handle(query);
+            cultivoResources = cultivos.stream().map(CultivoResourceFromEntityAssembler::toResourceFromEntity).toList();
+        }
+        
         return ResponseEntity.ok(cultivoResources);
     }
 
