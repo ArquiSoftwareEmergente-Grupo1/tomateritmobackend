@@ -2,6 +2,7 @@ package com.tomateritmo.arqemergente.sensores.interfaces.REST;
 
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetDashboardDataQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetLatestLecturasQuery;
+import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetRecomendacionesCultivosQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.queries.GetSensorHistoryQuery;
 import com.tomateritmo.arqemergente.sensores.domain.model.valueobjects.TipoSensor;
 import com.tomateritmo.arqemergente.sensores.domain.services.SensorCommandService;
@@ -9,6 +10,7 @@ import com.tomateritmo.arqemergente.sensores.domain.services.SensorQueryService;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.DashboardDataResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.LecturaSensorResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.RegistrarLecturaResource;
+import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.RecomendacionesCultivosResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.resources.SensorHistoryDataResource;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.transform.LecturaSensorResourceFromEntityAssembler;
 import com.tomateritmo.arqemergente.sensores.interfaces.REST.transform.RegistrarLecturaCommandFromResourceAssembler;
@@ -74,6 +76,21 @@ public class SensoresController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin
     ) {
         var query = new GetSensorHistoryQuery(tipos, inicio, fin);
+        return sensorQueryService.handle(query)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    
+    /**
+     * Obtiene recomendaciones para el cultivo basadas en los valores actuales de los sensores.
+     * Este endpoint es utilizado por sistemas automatizados (como Wokwi) para tomar decisiones
+     * sobre riego, luz y ventilación.
+     * 
+     * @return Recomendaciones para el manejo del cultivo
+     */
+    @GetMapping("/recomendaciones/cultivos")
+    public ResponseEntity<RecomendacionesCultivosResource> getRecomendaciones() {
+        var query = new GetRecomendacionesCultivosQuery();
         return sensorQueryService.handle(query)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

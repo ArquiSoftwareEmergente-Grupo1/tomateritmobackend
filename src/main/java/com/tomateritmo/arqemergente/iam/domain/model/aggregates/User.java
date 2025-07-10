@@ -20,6 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Table(name = "users") // Cambiando el nombre de la tabla para evitar conflicto con palabra reservada
 public class User extends AuditableAbstractAggregateRoot<User> {
 
   @NotBlank
