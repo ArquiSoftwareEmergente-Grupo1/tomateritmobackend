@@ -29,9 +29,15 @@ public class WebSecurityConfiguration {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors(corsConfigurer -> corsConfigurer.configurationSource(request -> {
       var cors = new CorsConfiguration();
-      cors.setAllowedOrigins(List.of("*"));
-      cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
+      // Usar las mismas configuraciones que en WebConfig
+      cors.setAllowedOrigins(List.of(
+          "http://localhost:4200",  // Desarrollo local
+          "https://tomateritmo-frontend.web.app"  // Frontend en Firebase
+      ));
+      cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
       cors.setAllowedHeaders(List.of("*"));
+      cors.setExposedHeaders(List.of("Authorization"));
+      cors.setAllowCredentials(true);
       return cors;
     }));
     http.csrf(csrfConfigurer -> csrfConfigurer.disable())
