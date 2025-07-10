@@ -71,12 +71,21 @@ public class AnalisisController {
     @PostMapping("/analisisResultados")
     public ResponseEntity<AnalisisResultadoDTO> crearAnalisisResultado(@RequestBody Map<String, Object> request) {
         try {
+            System.out.println("=== RECIBIENDO ANÁLISIS ===");
+            System.out.println("Datos recibidos: " + request);
+            
             // Crear entidad desde Map para manejar conversiones flexibles
             AnalisisResultado analisis = new AnalisisResultado();
             
-            analisis.setImagen((String) request.get("imagen"));
-            analisis.setDiagnostico((String) request.get("diagnostico"));
-            analisis.setAnomalia((String) request.get("anomalia"));
+            // Manejar campos String de manera segura
+            Object imagenObj = request.get("imagen");
+            analisis.setImagen(imagenObj != null ? imagenObj.toString() : null);
+            
+            Object diagnosticoObj = request.get("diagnostico");
+            analisis.setDiagnostico(diagnosticoObj != null ? diagnosticoObj.toString() : null);
+            
+            Object anomaliaObj = request.get("anomalia");
+            analisis.setAnomalia(anomaliaObj != null ? anomaliaObj.toString() : null);
             
             // Manejar confianza
             Object confianzaObj = request.get("confianza");
@@ -91,8 +100,15 @@ public class AnalisisController {
             List<String> recomendaciones = (List<String>) request.get("recomendaciones");
             analisis.setRecomendaciones(recomendaciones);
             
-            analisis.setCultivoId((String) request.get("cultivoId"));
-            analisis.setImagenPath((String) request.get("imagenPath"));
+            // Manejar cultivoId (puede venir como String o Integer)
+            Object cultivoIdObj = request.get("cultivoId");
+            if (cultivoIdObj != null) {
+                analisis.setCultivoId(cultivoIdObj.toString());
+            }
+            
+            // Manejar imagenPath de manera segura
+            Object imagenPathObj = request.get("imagenPath");
+            analisis.setImagenPath(imagenPathObj != null ? imagenPathObj.toString() : null);
             
             // Manejar confirmado
             Object confirmadoObj = request.get("confirmado");
@@ -119,13 +135,18 @@ public class AnalisisController {
                 analisis.setFechaAnalisis(LocalDateTime.now());
             }
             
+            System.out.println("Análisis creado: " + analisis);
+            System.out.println("Intentando guardar en base de datos...");
+            
             AnalisisResultado nuevoAnalisis = analisisService.crearAnalisis(analisis);
+            System.out.println("✅ Análisis guardado exitosamente con ID: " + nuevoAnalisis.getId());
             return ResponseEntity.ok(convertToDTO(nuevoAnalisis));
             
         } catch (Exception e) {
-            System.err.println("Error creando análisis: " + e.getMessage());
+            System.err.println("❌ Error creando análisis: " + e.getMessage());
+            System.err.println("Clase de excepción: " + e.getClass().getSimpleName());
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
