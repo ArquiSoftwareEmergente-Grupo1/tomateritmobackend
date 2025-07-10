@@ -19,7 +19,8 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(
                             "http://localhost:4200",  // Desarrollo local
-                            "https://tomateritmo-frontend.web.app"  // Frontend en Firebase
+                            "https://tomateritmo-frontend.web.app",  // Frontend en Firebase
+                            "https://tomateritmowebapp-g7dhecbme6hjg6fm.canadacentral-01.azurewebsites.net"  // Backend en Azure
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")

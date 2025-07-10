@@ -68,14 +68,39 @@ public class AuthenticationController {
    * @return the created user resource.
    */
   @PostMapping("/sign-up")
-  public ResponseEntity<UserResource> signUp(@RequestBody SignUpResource signUpResource) {
-    var signUpCommand = SignUpCommandFromResourceAssembler
-        .toCommandFromResource(signUpResource);
-    var user = userCommandService.handle(signUpCommand);
-    if (user.isEmpty()) {
-      return ResponseEntity.badRequest().build();
+  public ResponseEntity<Object> signUp(@RequestBody SignUpResource signUpResource) {
+    try {
+      // Validar entrada
+      if (signUpResource == null || signUpResource.username() == null || signUpResource.password() == null) {
+        return ResponseEntity.badRequest().body("Username and password are required");
+      }
+      
+      // Transformar y procesar comando
+      var signUpCommand = SignUpCommandFromResourceAssembler
+          .toCommandFromResource(signUpResource);
+      var user = userCommandService.handle(signUpCommand);
+      
+      if (user.isEmpty()) {
+        return ResponseEntity.badRequest().build();
+      }
+      
+      // Transformar respuesta
+      var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+      return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+    } catch (RuntimeException e) {
+      // Log del error para diagnóstico
+      System.err.println("Error during sign-up: " + e.getMessage());
+      e.printStackTrace();
+      
+      // Devolver mensaje de error adecuado
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    } catch (Exception e) {
+      // Log del error para diagnóstico
+      System.err.println("Unexpected error during sign-up: " + e.getMessage());
+      e.printStackTrace();
+      
+      // Devolver mensaje de error genérico para errores inesperados
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
     }
-    var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
-    return new ResponseEntity<>(userResource, HttpStatus.CREATED);
   }
 }

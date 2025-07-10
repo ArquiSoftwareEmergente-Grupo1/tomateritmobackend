@@ -32,7 +32,8 @@ public class WebSecurityConfiguration {
       // Usar las mismas configuraciones que en WebConfig
       cors.setAllowedOrigins(List.of(
           "http://localhost:4200",  // Desarrollo local
-          "https://tomateritmo-frontend.web.app"  // Frontend en Firebase
+          "https://tomateritmo-frontend.web.app",  // Frontend en Firebase
+          "https://tomateritmowebapp-g7dhecbme6hjg6fm.canadacentral-01.azurewebsites.net"  // Backend en Azure
       ));
       cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
       cors.setAllowedHeaders(List.of("*"));
