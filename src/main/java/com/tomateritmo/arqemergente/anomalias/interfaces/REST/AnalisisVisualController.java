@@ -13,7 +13,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/api/v1/legacy", produces = APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "*")
 public class AnalisisVisualController {
 
     @GetMapping("/analisisVisuales")

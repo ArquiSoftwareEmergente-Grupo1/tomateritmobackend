@@ -24,7 +24,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/api/v1/anomalias", produces = APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "*")
 @Tag(name = "Anomalías")
 public class AnomaliasController {
 
