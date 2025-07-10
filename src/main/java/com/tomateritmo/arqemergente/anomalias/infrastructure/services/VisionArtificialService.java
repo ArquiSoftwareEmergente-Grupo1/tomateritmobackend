@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 public class VisionArtificialService {
 
-    @Value("${vision.artificial.url:http://localhost:5000}")
+    @Value("${vision.artificial.url:https://ab932b44cad2.ngrok-free.app}")
     private String visionArtificialUrl;
 
     private final RestTemplate restTemplate;
