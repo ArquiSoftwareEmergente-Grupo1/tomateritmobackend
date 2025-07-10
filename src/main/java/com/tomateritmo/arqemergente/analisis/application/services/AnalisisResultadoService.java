@@ -2,6 +2,7 @@ package com.tomateritmo.arqemergente.analisis.application.services;
 
 import com.tomateritmo.arqemergente.analisis.domain.model.entities.AnalisisResultado;
 import com.tomateritmo.arqemergente.analisis.infrastructure.persistence.jpa.repositories.AnalisisResultadoRepository;
+import com.tomateritmo.arqemergente.historial.application.internal.outboundservices.HistorialEventLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class AnalisisResultadoService {
     
     @Autowired
     private AnalisisResultadoRepository analisisRepository;
+    
+    @Autowired
+    private HistorialEventLogger historialEventLogger;
     
     // Obtener todos los análisis
     public List<AnalisisResultado> obtenerTodosLosAnalisis() {
@@ -37,7 +41,17 @@ public class AnalisisResultadoService {
         if (analisis.getFechaAnalisis() == null) {
             analisis.setFechaAnalisis(LocalDateTime.now());
         }
-        return analisisRepository.save(analisis);
+        
+        AnalisisResultado savedAnalisis = analisisRepository.save(analisis);
+        
+        // Log the analysis event in the audit trail
+        String cultivoName = analisis.getCultivoId() != null ? analisis.getCultivoId() : "No especificado";
+        String tipoAnalisis = analisis.getAnomalia() != null ? analisis.getAnomalia() : "Análisis general";
+        String resultado = analisis.getDiagnostico() != null ? analisis.getDiagnostico() : "Sin diagnóstico";
+        
+        historialEventLogger.logAnalisisVisionArtificial(cultivoName, tipoAnalisis, resultado);
+        
+        return savedAnalisis;
     }
     
     // Actualizar análisis
