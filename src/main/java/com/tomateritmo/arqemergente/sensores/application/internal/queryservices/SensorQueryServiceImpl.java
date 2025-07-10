@@ -118,31 +118,31 @@ public class SensorQueryServiceImpl implements SensorQueryService {
         if (data.humedadSuelo() < HUMEDAD_IDEAL_MIN) {
             activarRiego = true;
             nivelHumedad = "BAJO";
-            recomendaciones.add("Activar sistema de riego: La humedad del suelo está baja (" + 
+            recomendaciones.add("ACCIÓN REQUERIDA: ACTIVAR EQUIPO DE RIEGO. La humedad del suelo está baja (" + 
                                data.humedadSuelo() + "%). Valor ideal: " + HUMEDAD_IDEAL_MIN + "% - " + HUMEDAD_IDEAL_MAX + "%.");
         } else if (data.humedadSuelo() > HUMEDAD_IDEAL_MAX) {
             nivelHumedad = "ALTO";
-            recomendaciones.add("Suspender riego: La humedad del suelo está alta (" + 
+            recomendaciones.add("ACCIÓN REQUERIDA: DESACTIVAR EQUIPO DE RIEGO. La humedad del suelo está alta (" + 
                                data.humedadSuelo() + "%). Valor ideal: " + HUMEDAD_IDEAL_MIN + "% - " + HUMEDAD_IDEAL_MAX + "%.");
         } else {
             nivelHumedad = "NORMAL";
-            recomendaciones.add("Humedad de suelo óptima (" + data.humedadSuelo() + "%).");
+            recomendaciones.add("SISTEMA DE RIEGO: MANTENER ESTADO ACTUAL. Humedad de suelo óptima (" + data.humedadSuelo() + "%).");
         }
         
         // Evaluación de temperatura
         String nivelTemperatura;
         if (data.temperatura() < TEMPERATURA_IDEAL_MIN) {
             nivelTemperatura = "BAJO";
-            recomendaciones.add("Aumentar temperatura: La temperatura está baja (" + 
+            recomendaciones.add("ACCIÓN REQUERIDA: ACTIVAR SISTEMA DE CALEFACCIÓN. La temperatura está baja (" + 
                                data.temperatura() + "°C). Valor ideal: " + TEMPERATURA_IDEAL_MIN + "°C - " + TEMPERATURA_IDEAL_MAX + "°C.");
         } else if (data.temperatura() > TEMPERATURA_IDEAL_MAX) {
             activarVentilacion = true;
             nivelTemperatura = "ALTO";
-            recomendaciones.add("Activar ventilación: La temperatura está alta (" + 
+            recomendaciones.add("ACCIÓN REQUERIDA: ACTIVAR EQUIPO DE VENTILACIÓN. La temperatura está alta (" + 
                                data.temperatura() + "°C). Valor ideal: " + TEMPERATURA_IDEAL_MIN + "°C - " + TEMPERATURA_IDEAL_MAX + "°C.");
         } else {
             nivelTemperatura = "NORMAL";
-            recomendaciones.add("Temperatura óptima (" + data.temperatura() + "°C).");
+            recomendaciones.add("SISTEMA DE CONTROL DE TEMPERATURA: MANTENER ESTADO ACTUAL. Temperatura óptima (" + data.temperatura() + "°C).");
         }
         
         // Evaluación de luminosidad
@@ -150,43 +150,73 @@ public class SensorQueryServiceImpl implements SensorQueryService {
         if (data.luminosidad() < LUMINOSIDAD_IDEAL_MIN) {
             abrirCompuertasLuz = true;
             nivelLuminosidad = "BAJO";
-            recomendaciones.add("Abrir compuertas de luz: La luminosidad está baja (" + 
+            recomendaciones.add("ACCIÓN REQUERIDA: ACTIVAR SISTEMA DE ILUMINACIÓN. La luminosidad está baja (" + 
                                data.luminosidad() + " lux). Valor ideal: " + LUMINOSIDAD_IDEAL_MIN + " - " + LUMINOSIDAD_IDEAL_MAX + " lux.");
         } else if (data.luminosidad() > LUMINOSIDAD_IDEAL_MAX) {
             nivelLuminosidad = "ALTO";
-            recomendaciones.add("Cerrar compuertas de luz: La luminosidad está alta (" + 
+            recomendaciones.add("ACCIÓN REQUERIDA: CERRAR COMPUERTAS DE LUZ. La luminosidad está alta (" + 
                                data.luminosidad() + " lux). Valor ideal: " + LUMINOSIDAD_IDEAL_MIN + " - " + LUMINOSIDAD_IDEAL_MAX + " lux.");
         } else {
             nivelLuminosidad = "NORMAL";
-            recomendaciones.add("Luminosidad óptima (" + data.luminosidad() + " lux).");
+            recomendaciones.add("SISTEMA DE ILUMINACIÓN: MANTENER ESTADO ACTUAL. Luminosidad óptima (" + data.luminosidad() + " lux).");
         }
         
         // pH y conductividad eléctrica
         if (data.ph() != null) {
             if (data.ph() < 5.5) {
-                recomendaciones.add("El pH está bajo (" + data.ph() + "). Considerar ajustar la nutrición para aumentarlo.");
+                recomendaciones.add("ACCIÓN REQUERIDA: AJUSTAR SISTEMA DE NUTRICIÓN. El pH está bajo (" + data.ph() + 
+                                  "). Se recomienda aplicar correctores de pH para aumentarlo. Valor ideal: 5.5 - 6.5.");
             } else if (data.ph() > 6.5) {
-                recomendaciones.add("El pH está alto (" + data.ph() + "). Considerar ajustar la nutrición para reducirlo.");
+                recomendaciones.add("ACCIÓN REQUERIDA: AJUSTAR SISTEMA DE NUTRICIÓN. El pH está alto (" + data.ph() + 
+                                  "). Se recomienda aplicar correctores de pH para reducirlo. Valor ideal: 5.5 - 6.5.");
             } else {
-                recomendaciones.add("pH óptimo (" + data.ph() + ").");
+                recomendaciones.add("SISTEMA DE NUTRICIÓN: MANTENER CONFIGURACIÓN ACTUAL. pH óptimo (" + data.ph() + ").");
             }
         }
         
         if (data.ec() != null) {
             if (data.ec() < 2.0) {
-                recomendaciones.add("La conductividad eléctrica está baja (" + data.ec() + "). Considerar aumentar la concentración de nutrientes.");
+                recomendaciones.add("ACCIÓN REQUERIDA: AJUSTAR SISTEMA DE NUTRICIÓN. La conductividad eléctrica está baja (" + data.ec() + 
+                                  "). Se recomienda aumentar la concentración de nutrientes. Valor ideal: 2.0 - 3.5.");
             } else if (data.ec() > 3.5) {
-                recomendaciones.add("La conductividad eléctrica está alta (" + data.ec() + "). Considerar diluir la solución nutritiva.");
+                recomendaciones.add("ACCIÓN REQUERIDA: AJUSTAR SISTEMA DE NUTRICIÓN. La conductividad eléctrica está alta (" + data.ec() + 
+                                  "). Se recomienda diluir la solución nutritiva. Valor ideal: 2.0 - 3.5.");
             } else {
-                recomendaciones.add("Conductividad eléctrica óptima (" + data.ec() + ").");
+                recomendaciones.add("SISTEMA DE NUTRICIÓN: MANTENER CONFIGURACIÓN ACTUAL. Conductividad eléctrica óptima (" + data.ec() + ").");
             }
         }
+        
+        // Añadir resumen de acciones al principio
+        List<String> accionesEquipos = new ArrayList<>();
+        accionesEquipos.add("RESUMEN DE ACCIONES REQUERIDAS:");
+        
+        if (activarRiego) {
+            accionesEquipos.add("- ACTIVAR EQUIPO DE RIEGO");
+        } else {
+            accionesEquipos.add("- MANTENER EQUIPO DE RIEGO EN ESTADO ACTUAL");
+        }
+        
+        if (abrirCompuertasLuz) {
+            accionesEquipos.add("- ACTIVAR SISTEMA DE ILUMINACIÓN");
+        } else {
+            accionesEquipos.add("- MANTENER SISTEMA DE ILUMINACIÓN EN ESTADO ACTUAL");
+        }
+        
+        if (activarVentilacion) {
+            accionesEquipos.add("- ACTIVAR EQUIPO DE VENTILACIÓN");
+        } else {
+            accionesEquipos.add("- MANTENER EQUIPO DE VENTILACIÓN EN ESTADO ACTUAL");
+        }
+        
+        // Añadir el resumen al principio de la lista de recomendaciones
+        accionesEquipos.add("\nDETALLES DE RECOMENDACIONES:");
+        accionesEquipos.addAll(recomendaciones);
         
         return Optional.of(new RecomendacionesCultivosResource(
             activarRiego,
             abrirCompuertasLuz,
             activarVentilacion,
-            recomendaciones,
+            accionesEquipos,
             nivelHumedad,
             nivelLuminosidad,
             nivelTemperatura
